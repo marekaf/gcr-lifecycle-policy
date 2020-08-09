@@ -27,11 +27,11 @@ func HandleCleanup(c Config) string {
 
 	token := getToken(c.CredsFile)
 
-	catalog := fetchCatalog(token)
+	catalog := fetchCatalog(c, token)
 
 	filteredCatalog := filterCatalog(catalog, c.RepoFilter)
 
-	list := fetchTags(token, filteredCatalog)
+	list := fetchTags(c, token, filteredCatalog)
 
 	cleanupList := filter(list)
 

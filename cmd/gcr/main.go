@@ -7,20 +7,22 @@ import (
 )
 
 var (
-	credsFile     string   // path of credentials json file
-	repoFilter    []string // list of regions we want to check
-	logLevel      string
-	keepTags      int
-	retentionDays int
-	clusterId     string
+	credsFile      string   // path of credentials json file
+	repoFilter     []string // list of regions we want to check
+	logLevel       string
+	keepTags       int
+	retentionDays  int
+	clusterId      string
+	registryPrefix string
 
 	// default values
-	repoFilterDefault    = []string{}
-	logLevelDefault      = "ERROR"
-	keepTagsDefault      = 10
-	retentionDaysDefault = 365
-	credsFileDefault     = "./creds/serviceaccount.json"
-	clusterIdDefault     = "my-gcp-project/us-east1-a/my-cluster"
+	repoFilterDefault     = []string{}
+	logLevelDefault       = "ERROR"
+	keepTagsDefault       = 10
+	retentionDaysDefault  = 365
+	credsFileDefault      = "./creds/serviceaccount.json"
+	clusterIdDefault      = "my-gcp-project/us-east1-a/my-cluster"
+	registryPrefixDefault = "eu.gcr.io"
 
 	// commands
 	rootCmd = &cobra.Command{
@@ -68,6 +70,7 @@ func init() {
 
 	// root command
 	rootCmd.PersistentFlags().StringVar(&credsFile, "creds", credsFileDefault, "credential file")
+	rootCmd.PersistentFlags().StringVar(&registryPrefix, "registry", registryPrefixDefault, "GCR url to use")
 	rootCmd.PersistentFlags().StringArrayVar(&repoFilter, "repos", repoFilterDefault, "list of repos you want to work with")
 	rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", logLevelDefault, "log level")
 	rootCmd.PersistentFlags().StringVar(&clusterId, "cluster", clusterIdDefault, "cluster id")
@@ -114,6 +117,7 @@ func cleanup(cmd *cobra.Command, args []string) {
 		RepoFilter:    repoFilter,
 		KeepTags:      keepTags,
 		RetentionDays: retentionDays,
+		RegistryURL:   registryPrefix,
 	}
 
 	worker.HandleCleanup(config)
@@ -125,8 +129,9 @@ func list(cmd *cobra.Command, args []string) {
 	setLogLevel()
 
 	config := worker.Config{
-		CredsFile:  credsFile,
-		RepoFilter: repoFilter,
+		CredsFile:   credsFile,
+		RepoFilter:  repoFilter,
+		RegistryURL: registryPrefix,
 	}
 
 	result := worker.HandleList(config)
@@ -139,8 +144,9 @@ func listRepos(cmd *cobra.Command, args []string) {
 	setLogLevel()
 
 	config := worker.Config{
-		CredsFile:  credsFile,
-		RepoFilter: repoFilter,
+		CredsFile:   credsFile,
+		RepoFilter:  repoFilter,
+		RegistryURL: registryPrefix,
 	}
 
 	result := worker.HandleListRepos(config)
@@ -153,9 +159,10 @@ func listCluster(cmd *cobra.Command, args []string) {
 	setLogLevel()
 
 	config := worker.Config{
-		CredsFile:  credsFile,
-		RepoFilter: repoFilter,
-		ClusterID:  clusterId,
+		CredsFile:   credsFile,
+		RepoFilter:  repoFilter,
+		ClusterID:   clusterId,
+		RegistryURL: registryPrefix,
 	}
 
 	result := worker.HandleListCluster(config)
