@@ -30,6 +30,7 @@ type Config struct {
 	KeepTags      int
 	RetentionDays int
 	ClusterID     string
+	RegistryURL   string
 }
 
 type FilteredList struct {

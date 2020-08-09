@@ -2,6 +2,8 @@ package worker
 
 import (
 	"os"
+	"path/filepath"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 	// kubernetes
@@ -10,6 +12,8 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
+	"k8s.io/client-go/tools/clientcmd"
 )
 
 // HandleList function
@@ -17,11 +21,11 @@ func HandleList(c Config) ListResponse {
 
 	token := getToken(c.CredsFile)
 
-	catalog := fetchCatalog(token)
+	catalog := fetchCatalog(c, token)
 
 	filteredCatalog := filterCatalog(catalog, c.RepoFilter)
 
-	list := fetchTags(token, filteredCatalog)
+	list := fetchTags(c, token, filteredCatalog)
 
 	return list
 }
@@ -31,25 +35,21 @@ func HandleListRepos(c Config) Catalog {
 
 	token := getToken(c.CredsFile)
 
-	catalog := fetchCatalog(token)
+	catalog := fetchCatalog(c, token)
 
 	return catalog
 }
 
-func getConfigMap(clientset *kubernetes.Clientset, name string, namespace string) (*v1.ConfigMap, error) {
+func getAllPods(clientset *kubernetes.Clientset) (*v1.PodList, error) {
 
-	res, err := clientset.CoreV1().ConfigMaps(namespace).Get(name, metav1.GetOptions{})
+	res, err := clientset.CoreV1().Pods("").List(metav1.ListOptions{})
 	if errors.IsNotFound(err) {
-		log.WithFields(log.Fields{"configmap": name, "namespace": namespace}).Error("configmap not found")
 		return nil, err
-	} else if statusError, isStatus := err.(*errors.StatusError); isStatus {
-		log.WithFields(log.Fields{"configmap": name, "namespace": namespace, "error": statusError.ErrStatus.Message}).Error("configmap not found")
+	} else if _, isStatus := err.(*errors.StatusError); isStatus {
 		return nil, err
 	} else if err != nil {
 		panic(err.Error())
 	}
-
-	log.WithFields(log.Fields{"configmap": name, "namespace": namespace}).Info("configmap found")
 
 	return res, nil
 }
@@ -57,40 +57,37 @@ func getConfigMap(clientset *kubernetes.Clientset, name string, namespace string
 // HandleListCluster function
 func HandleListCluster(c Config) Catalog {
 
-	token := getToken(c.CredsFile)
+	cat := Catalog{}
 
-	// kubeconfig := filepath.Join(homeDir(), ".kube", "config")
-	// configmapName := "deploy-snapshot"
-	// namespace := "kube-system"
-	// property := "mysql"
+	kubeconfig := filepath.Join(homeDir(), ".kube", "config")
 
-	// config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
-	// if err != nil {
-	// 	log.Fatalf("could not build kubernetes config: %s", err)
-	// }
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
+	if err != nil {
+		log.Fatalf("could not build kubernetes config: %s", err)
+	}
 
-	// // create the clientset
-	// clientset, err := kubernetes.NewForConfig(config)
-	// if err != nil {
-	// 	log.Fatalf("could not create clientset: %s", err)
-	// }
+	// create the clientset
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		log.Fatalf("could not create clientset: %s", err)
+	}
 
-	// res, err := getConfigMap(clientset, configmapName, namespace)
-	// if err != nil {
-	// 	log.Fatalf("could not get configmap: %s", err)
-	// }
+	res, err := getAllPods(clientset)
+	if err != nil {
+		log.Fatalf("could not get pod: %s", err)
+	}
 
-	// if _, ok := res.Data[property]; !ok {
-	// 	log.
-	// 		WithField("property", property).
-	// 		Fatalf("property does not exist")
-	// }
+	for _, pod := range res.Items {
+		for _, container := range pod.Spec.Containers {
 
-	// fmt.Println(res.Data[property])
+			// add only relevant images to our GCR
+			if strings.HasPrefix(container.Image, c.RegistryURL) {
+				cat.Repositories = append(cat.Repositories, container.Image)
+			}
+		}
+	}
 
-	catalog := fetchCatalog(token)
-
-	return catalog
+	return cat
 }
 
 func homeDir() string {

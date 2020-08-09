@@ -10,10 +10,10 @@ import (
 	"golang.org/x/oauth2"
 )
 
-func fetchCatalog(auth *oauth2.Token) Catalog {
+func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 
 	// TODO: make this configurable
-	url := "https://eu.gcr.io/v2/_catalog"
+	url := "https://" + c.RegistryURL + "/v2/_catalog"
 
 	spaceClient := http.Client{
 		Timeout: time.Second * 10, // Timeout after 10 seconds
@@ -71,13 +71,13 @@ func filterCatalog(c Catalog, filter []string) Catalog {
 	return filtered
 }
 
-func fetchTags(auth *oauth2.Token, catalog Catalog) ListResponse {
+func fetchTags(c Config, auth *oauth2.Token, catalog Catalog) ListResponse {
 
 	list := ListResponse{}
 
 	for _, image := range catalog.Repositories {
 
-		url := "https://eu.gcr.io/v2/" + image + "/tags/list"
+		url := "https://" + c.RegistryURL + "/v2/" + image + "/tags/list"
 
 		spaceClient := http.Client{
 			Timeout: time.Second * 10, // Timeout after 10 seconds
@@ -109,9 +109,6 @@ func fetchTags(auth *oauth2.Token, catalog Catalog) ListResponse {
 		if jsonErr != nil {
 			log.Fatal(jsonErr)
 		}
-
-		// fmt.Println()
-		// fmt.Println(tags.Manifest)
 
 		list.TagsResponses = append(list.TagsResponses, tags)
 	}
