@@ -36,9 +36,7 @@ func toSortedSlice(m map[string]Digest) []Digest {
 		digests = append(digests, v)
 
 	}
-
 	sort.Sort(ByTimeCreated(digests))
 
 	return digests
-
 }

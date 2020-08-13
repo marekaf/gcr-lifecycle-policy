@@ -48,10 +48,7 @@ func printBeforeCleanup(list FilteredList) {
 
 	for _, item := range list.TagsResponses {
 		for digest, manifest := range item.Manifest {
-
-			whereToSplit := strings.LastIndex(item.Name, "/") + 1
-			repo := item.Name[:whereToSplit]
-			image := item.Name[whereToSplit:]
+			repo := extractRepositoryFromImage(item.Name)
 
 			// digest is always prefixed with 'sha256:'
 			digestSlug := digest[:27] + "..."
@@ -68,9 +65,13 @@ func printBeforeCleanup(list FilteredList) {
 			tmp, _ := strconv.Atoi(manifest.ImageSizeBytes)
 			totalSize += tmp
 
-			t.AppendRow([]interface{}{i, repo, image, digestSlug, tagsSlug, utils.ByteCountSI(manifest.ImageSizeBytes), ageReadable})
+			t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName, digestSlug, tagsSlug, utils.ByteCountSI(manifest.ImageSizeBytes), ageReadable})
 
 			i++
+
+			if i > 100 {
+				break
+			}
 		}
 
 	}
@@ -94,9 +95,7 @@ func PrintList(list ListResponse) {
 	for _, item := range list.TagsResponses {
 		for digest, manifest := range item.Manifest {
 
-			whereToSplit := strings.LastIndex(item.Name, "/") + 1
-			repo := item.Name[:whereToSplit]
-			image := item.Name[whereToSplit:]
+			repo := extractRepositoryFromImage(item.Name)
 
 			// digest is always prefixed with 'sha256:'
 			digestSlug := digest[:27] + "..."
@@ -113,7 +112,7 @@ func PrintList(list ListResponse) {
 			timecreated, _ := strconv.ParseInt(manifest.TimeCreatedMs, 10, 64)
 			ageReadable := time.Unix(timecreated/1000, 0).Format("2006-02-01")
 
-			t.AppendRow([]interface{}{i, repo, image, digestSlug, tagsSlug, utils.ByteCountSI(manifest.ImageSizeBytes), ageReadable})
+			t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName, digestSlug, tagsSlug, utils.ByteCountSI(manifest.ImageSizeBytes), ageReadable})
 
 			i++
 		}
@@ -121,11 +120,7 @@ func PrintList(list ListResponse) {
 	}
 
 	t.AppendFooter(table.Row{"", "", "", "", "Total size", utils.ByteCountSIInt(totalSize)})
-	// if billIdx >= 0 {
-	// 	t.AppendFooter(table.Row{"", "", res.CheckInfo[billIdx].Name, res.CheckResult[billIdx].Impact})
-	// }
 	t.Render()
-
 }
 
 // PrintListRepos prints the report in a pretty table output
@@ -133,44 +128,33 @@ func PrintListRepos(cat Catalog) {
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"#", "REPO", "IMAGE_NAME"})
+	t.AppendHeader(table.Row{"#", "REPO", "IMAGE_NAME", "TAG"})
 
 	i := 0
 
-	for _, item := range cat.Repositories {
+	for _, repo := range cat.Repositories {
 
-		whereToSplit := strings.LastIndex(item, "/") + 1
-		repo := item[:whereToSplit]
-		image := item[whereToSplit:]
-
-		t.AppendRow([]interface{}{i, repo, image})
+		t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName, repo.Tag})
 
 		i++
-
 	}
 
 	t.Render()
 }
 
-// Print prints the report in a pretty table output
+// PrintListCluster prints the report in a pretty table output
 func PrintListCluster(cat Catalog) {
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"#", "REPO", "IMAGE_NAME"})
+	t.AppendHeader(table.Row{"#", "REPO", "IMAGE_NAME", "TAG"})
 
 	i := 0
 
-	for _, item := range cat.Repositories {
-
-		whereToSplit := strings.LastIndex(item, "/") + 1
-		repo := item[:whereToSplit]
-		image := item[whereToSplit:]
-
-		t.AppendRow([]interface{}{i, repo, image})
+	for _, repo := range cat.Repositories {
+		t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName, repo.Tag})
 
 		i++
-
 	}
 
 	t.Render()
