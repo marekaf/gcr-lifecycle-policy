@@ -40,44 +40,29 @@ func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 		log.Fatal(readErr)
 	}
 
-	catalog := Catalog{}
-	jsonErr := json.Unmarshal(body, &catalog)
+	catalogResp := CatalogResponse{}
+	jsonErr := json.Unmarshal(body, &catalogResp)
 	if jsonErr != nil {
 		log.Fatal(jsonErr)
 	}
 
+	//log.Println(string(body))
+
+	catalog := Catalog{}
+	for _, item := range catalogResp.Repositories {
+		catalog.Repositories = append(catalog.Repositories, extractRepositoryFromImage(item))
+	}
+
 	return catalog
-}
-
-func filterCatalog(c Catalog, filter []string) Catalog {
-
-	// by default not filter anything
-	if len(filter) == 0 {
-		return c
-	}
-
-	filtered := Catalog{}
-
-	for _, repo := range c.Repositories {
-
-		for _, filterRepo := range filter {
-			if repo == filterRepo {
-				filtered.Repositories = append(filtered.Repositories, filterRepo)
-				break
-			}
-		}
-	}
-
-	return filtered
 }
 
 func fetchTags(c Config, auth *oauth2.Token, catalog Catalog) ListResponse {
 
 	list := ListResponse{}
 
-	for _, image := range catalog.Repositories {
+	for _, repo := range catalog.Repositories {
 
-		url := "https://" + c.RegistryURL + "/v2/" + image + "/tags/list"
+		url := "https://" + c.RegistryURL + "/v2/" + repo.RepositoryPrefix + repo.ImageName + "/tags/list"
 
 		spaceClient := http.Client{
 			Timeout: time.Second * 10, // Timeout after 10 seconds
@@ -109,6 +94,8 @@ func fetchTags(c Config, auth *oauth2.Token, catalog Catalog) ListResponse {
 		if jsonErr != nil {
 			log.Fatal(jsonErr)
 		}
+
+		//log.Println(string(body))
 
 		list.TagsResponses = append(list.TagsResponses, tags)
 	}

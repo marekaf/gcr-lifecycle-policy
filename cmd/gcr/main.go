@@ -1,6 +1,9 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/marekaf/gcr-lifecycle-policy/pkg/worker"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -12,7 +15,7 @@ var (
 	logLevel       string
 	keepTags       int
 	retentionDays  int
-	clusterId      string
+	kubeconfigPath string
 	registryPrefix string
 
 	// default values
@@ -21,8 +24,8 @@ var (
 	keepTagsDefault       = 10
 	retentionDaysDefault  = 365
 	credsFileDefault      = "./creds/serviceaccount.json"
-	clusterIdDefault      = "my-gcp-project/us-east1-a/my-cluster"
 	registryPrefixDefault = "eu.gcr.io"
+	kubeconfigPathDefault = filepath.Join(homeDir(), ".kube", "config")
 
 	// commands
 	rootCmd = &cobra.Command{
@@ -73,7 +76,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&registryPrefix, "registry", registryPrefixDefault, "GCR url to use")
 	rootCmd.PersistentFlags().StringArrayVar(&repoFilter, "repos", repoFilterDefault, "list of repos you want to work with")
 	rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", logLevelDefault, "log level")
-	rootCmd.PersistentFlags().StringVar(&clusterId, "cluster", clusterIdDefault, "cluster id")
+	rootCmd.PersistentFlags().StringVar(&kubeconfigPath, "cluster", kubeconfigPathDefault, "kubeconfig path")
 
 	// cleanup command
 	cleanupCmd.PersistentFlags().IntVar(&keepTags, "keep-tags", keepTagsDefault, "number of tags to keep per image")
@@ -113,11 +116,12 @@ func cleanup(cmd *cobra.Command, args []string) {
 	setLogLevel()
 
 	config := worker.Config{
-		CredsFile:     credsFile,
-		RepoFilter:    repoFilter,
-		KeepTags:      keepTags,
-		RetentionDays: retentionDays,
-		RegistryURL:   registryPrefix,
+		CredsFile:      credsFile,
+		RepoFilter:     repoFilter,
+		KeepTags:       keepTags,
+		RetentionDays:  retentionDays,
+		RegistryURL:    registryPrefix,
+		KubeconfigPath: kubeconfigPath,
 	}
 
 	worker.HandleCleanup(config)
@@ -159,12 +163,19 @@ func listCluster(cmd *cobra.Command, args []string) {
 	setLogLevel()
 
 	config := worker.Config{
-		CredsFile:   credsFile,
-		RepoFilter:  repoFilter,
-		ClusterID:   clusterId,
-		RegistryURL: registryPrefix,
+		CredsFile:      credsFile,
+		RepoFilter:     repoFilter,
+		KubeconfigPath: kubeconfigPath,
+		RegistryURL:    registryPrefix,
 	}
 
 	result := worker.HandleListCluster(config)
 	worker.PrintListCluster(result)
+}
+
+func homeDir() string {
+	if h := os.Getenv("HOME"); h != "" {
+		return h
+	}
+	return os.Getenv("USERPROFILE") // windows
 }
