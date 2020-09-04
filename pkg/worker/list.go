@@ -4,6 +4,7 @@ import (
 
 	// kubernetes
 
+	// we need this for our oauth2 token
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 

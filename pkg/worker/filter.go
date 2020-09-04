@@ -1,10 +1,5 @@
 package worker
 
-import (
-	"fmt"
-	"time"
-)
-
 func filterCatalog(c Catalog, filter []string) Catalog {
 
 	// by default do not filter anything
@@ -27,14 +22,20 @@ func filterCatalog(c Catalog, filter []string) Catalog {
 	return filtered
 }
 
-func daysToTime(days int) time.Time {
-	return time.Now().AddDate(0, -days, 0)
-}
-
-func existsInCluster(c Catalog, d Digest) bool {
+func existsInCluster(c Catalog, d Digest, name string) bool {
 
 	for _, repo := range c.Repositories {
+		// check the tags only for the same prefix / image names
+		if repo.ImageName != name {
+			continue
+		}
 		for _, tag := range d.Tag {
+
+			// don't compare empty tags, skip them
+			if tag == "" {
+				continue
+			}
+
 			if repo.Tag == tag {
 				return true
 			}
@@ -78,7 +79,7 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 				continue
 			}
 
-			if existsInCluster(clusterCat, digest) {
+			if existsInCluster(clusterCat, digest, image.Name) {
 				//fmt.Printf("not deleting digest %+v because existsInCluster", digest)
 				continue
 			}
@@ -93,7 +94,7 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 				continue
 			}
 
-			fmt.Printf("deleting digest %+v", digest)
+			//fmt.Printf("deleting digest %+v", digest)
 			// TODO: we should delete all tags before we delete the image
 			filteredManifests[digest.Name] = Digest(digest)
 

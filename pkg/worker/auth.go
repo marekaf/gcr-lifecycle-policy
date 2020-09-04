@@ -36,7 +36,7 @@ func serviceAccount(credentialFile string) (*oauth2.Token, error) {
 		PrivateKey: []byte(c.PrivateKey),
 		Scopes: []string{
 			"https://www.googleapis.com/auth/cloud-platform.read-only",
-			"https://www.googleapis.com/auth/devstorage.read_only",
+			"https://www.googleapis.com/auth/devstorage.read_write",
 		},
 		TokenURL: google.JWTTokenURL,
 	}

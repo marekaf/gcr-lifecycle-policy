@@ -96,6 +96,7 @@ func fetchTags(c Config, auth *oauth2.Token, catalog Catalog) ListResponse {
 		}
 
 		//log.Println(string(body))
+		//log.Println("")
 
 		list.TagsResponses = append(list.TagsResponses, tags)
 	}
