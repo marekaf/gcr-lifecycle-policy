@@ -1,6 +1,9 @@
 package worker
 
-import "strings"
+import (
+	"strings"
+	"time"
+)
 
 func extractRepositoryFromImage(input string) Repository {
 
@@ -29,4 +32,8 @@ func extractRepositoryFromImage(input string) Repository {
 	}
 
 	return repo
+}
+
+func daysToTime(days int) time.Time {
+	return time.Now().AddDate(0, -days, 0)
 }

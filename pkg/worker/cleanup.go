@@ -1,13 +1,96 @@
 package worker
 
 import (
+	"io/ioutil"
 	"log"
+	"net/http"
 	"strconv"
 	"time"
+
+	"golang.org/x/oauth2"
 )
 
-func cleanup(list FilteredList) {
+func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 
+	spaceClient := http.Client{
+		Timeout: time.Second * 10, // Timeout after 10 seconds
+	}
+
+	for _, repo := range list.TagsResponses {
+
+		for _, digest := range repo.Manifest {
+
+			// first delete all tags to prevent GOOGLE_MANIFEST_DANGLING_TAG error
+			for _, tag := range repo.Tags {
+
+				url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + tag
+
+				req, err := http.NewRequest(http.MethodDelete, url, nil)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				req.Header.Set("Authorization", "Bearer "+auth.AccessToken)
+
+				res, getErr := spaceClient.Do(req)
+				if getErr != nil {
+					log.Fatal(getErr)
+				}
+
+				if res.Body != nil {
+					defer res.Body.Close()
+				}
+
+				body, readErr := ioutil.ReadAll(res.Body)
+				if readErr != nil {
+					log.Fatal(readErr)
+				}
+
+				// tags := TagsResponse{}
+				// jsonErr := json.Unmarshal(body, &tags)
+				// if jsonErr != nil {
+				// 	log.Fatal(jsonErr)
+				// }
+
+				log.Println(string(body))
+
+			}
+
+			// second delete the image by referencing the manifest itself
+			url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + digest.Name
+
+			req, err := http.NewRequest(http.MethodDelete, url, nil)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			req.Header.Set("Authorization", "Bearer "+auth.AccessToken)
+
+			res, getErr := spaceClient.Do(req)
+			if getErr != nil {
+				log.Fatal(getErr)
+			}
+
+			if res.Body != nil {
+				defer res.Body.Close()
+			}
+
+			body, readErr := ioutil.ReadAll(res.Body)
+			if readErr != nil {
+				log.Fatal(readErr)
+			}
+
+			// tags := TagsResponse{}
+			// jsonErr := json.Unmarshal(body, &tags)
+			// if jsonErr != nil {
+			// 	log.Fatal(jsonErr)
+			// }
+
+			log.Println(string(body))
+
+		}
+
+	}
 }
 
 func olderThanRetention(d Digest, retention time.Time) bool {
@@ -23,7 +106,7 @@ func olderThanRetention(d Digest, retention time.Time) bool {
 }
 
 // HandleCleanup function
-func HandleCleanup(c Config) string {
+func HandleCleanup(c Config) {
 
 	token := getToken(c.CredsFile)
 
@@ -37,7 +120,5 @@ func HandleCleanup(c Config) string {
 
 	printBeforeCleanup(cleanupList)
 
-	cleanup(cleanupList)
-
-	return "ahoj"
+	cleanup(cleanupList, c, token)
 }
