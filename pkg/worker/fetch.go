@@ -2,7 +2,6 @@ package worker
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -19,25 +18,9 @@ func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 		Timeout: time.Second * 10, // Timeout after 10 seconds
 	}
 
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	body, err := getWithAuth(spaceClient, url, auth.AccessToken)
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	req.Header.Set("Authorization", "Bearer "+auth.AccessToken)
-
-	res, getErr := spaceClient.Do(req)
-	if getErr != nil {
-		log.Fatal(getErr)
-	}
-
-	if res.Body != nil {
-		defer res.Body.Close()
-	}
-
-	body, readErr := ioutil.ReadAll(res.Body)
-	if readErr != nil {
-		log.Fatal(readErr)
 	}
 
 	catalogResp := CatalogResponse{}
@@ -68,25 +51,9 @@ func fetchTags(c Config, auth *oauth2.Token, catalog Catalog) ListResponse {
 			Timeout: time.Second * 10, // Timeout after 10 seconds
 		}
 
-		req, err := http.NewRequest(http.MethodGet, url, nil)
+		body, err := getWithAuth(spaceClient, url, auth.AccessToken)
 		if err != nil {
 			log.Fatal(err)
-		}
-
-		req.Header.Set("Authorization", "Bearer "+auth.AccessToken)
-
-		res, getErr := spaceClient.Do(req)
-		if getErr != nil {
-			log.Fatal(getErr)
-		}
-
-		if res.Body != nil {
-			defer res.Body.Close()
-		}
-
-		body, readErr := ioutil.ReadAll(res.Body)
-		if readErr != nil {
-			log.Fatal(readErr)
 		}
 
 		tags := TagsResponse{}
