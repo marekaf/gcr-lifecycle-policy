@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -25,25 +24,9 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 
 				url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + tag
 
-				req, err := http.NewRequest(http.MethodDelete, url, nil)
+				body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
 				if err != nil {
 					log.Fatal(err)
-				}
-
-				req.Header.Set("Authorization", "Bearer "+auth.AccessToken)
-
-				res, getErr := spaceClient.Do(req)
-				if getErr != nil {
-					log.Fatal(getErr)
-				}
-
-				if res.Body != nil {
-					defer res.Body.Close()
-				}
-
-				body, readErr := ioutil.ReadAll(res.Body)
-				if readErr != nil {
-					log.Fatal(readErr)
 				}
 
 				// tags := TagsResponse{}
@@ -59,25 +42,9 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 			// second delete the image by referencing the manifest itself
 			url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + digest.Name
 
-			req, err := http.NewRequest(http.MethodDelete, url, nil)
+			body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
 			if err != nil {
 				log.Fatal(err)
-			}
-
-			req.Header.Set("Authorization", "Bearer "+auth.AccessToken)
-
-			res, getErr := spaceClient.Do(req)
-			if getErr != nil {
-				log.Fatal(getErr)
-			}
-
-			if res.Body != nil {
-				defer res.Body.Close()
-			}
-
-			body, readErr := ioutil.ReadAll(res.Body)
-			if readErr != nil {
-				log.Fatal(readErr)
 			}
 
 			// tags := TagsResponse{}
