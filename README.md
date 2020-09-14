@@ -48,3 +48,7 @@ docker run -it -e PROJECT_ID=my-project \
 
 ### deploy it
 I'm planning on using this in gitlab-ci scheduled pipeline - once a week to run this container with proper ENV vars, passing it the service account in base64 in gitlab secrets.
+
+
+## TODO:
+try to make use of `https://github.com/google/go-containerregistry/tree/master`
