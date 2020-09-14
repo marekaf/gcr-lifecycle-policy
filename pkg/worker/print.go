@@ -51,12 +51,12 @@ func printBeforeCleanup(list FilteredList) {
 			repo := extractRepositoryFromImage(item.Name)
 
 			// digest is always prefixed with 'sha256:'
-			digestSlug := digest[:27] + "..."
+			digestSlug := digest[:27] + "…"
 
 			tagsSlug := strings.Join(manifest.Tag, ",")
 
 			if len(tagsSlug) > 30 {
-				tagsSlug = tagsSlug[:27] + "..."
+				tagsSlug = tagsSlug[:27] + "…"
 			}
 
 			timecreated, _ := strconv.ParseInt(manifest.TimeCreatedMs, 10, 64)
@@ -98,7 +98,7 @@ func PrintList(list ListResponse) {
 			repo := extractRepositoryFromImage(item.Name)
 
 			// digest is always prefixed with 'sha256:'
-			digestSlug := digest[:27] + "..."
+			digestSlug := digest[:27] + "…"
 
 			tagsSlug := strings.Join(manifest.Tag, ",")
 
@@ -106,7 +106,7 @@ func PrintList(list ListResponse) {
 			totalSize += tmp
 
 			if len(tagsSlug) > 30 {
-				tagsSlug = tagsSlug[:27] + "..."
+				tagsSlug = tagsSlug[:27] + "…"
 			}
 
 			timecreated, _ := strconv.ParseInt(manifest.TimeCreatedMs, 10, 64)
