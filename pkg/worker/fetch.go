@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"sync"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -39,33 +40,69 @@ func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 	return catalog
 }
 
+type request struct {
+	url   string
+	token string
+}
+
+func concFetchTags(req request, wg *sync.WaitGroup, c chan<- TagsResponse) {
+
+	spaceClient := http.Client{
+		Timeout: time.Second * 10, // Timeout after 10 seconds
+	}
+
+	body, err := getWithAuth(spaceClient, req.url, req.token)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	tags := TagsResponse{}
+	jsonErr := json.Unmarshal(body, &tags)
+	if jsonErr != nil {
+		log.Fatal(jsonErr)
+	}
+
+	if body != nil {
+		c <- tags
+	} else {
+		log.Fatalf("error fetching tags")
+	}
+
+	wg.Done()
+}
+
 func fetchTags(c Config, auth *oauth2.Token, catalog Catalog) ListResponse {
 
 	list := ListResponse{}
 
+	var wg sync.WaitGroup // create waitgroup (empty struct)
+
+	queue := make(chan TagsResponse, len(catalog.Repositories))
+
 	for _, repo := range catalog.Repositories {
+
+		wg.Add(1)
 
 		url := "https://" + c.RegistryURL + "/v2/" + repo.RepositoryPrefix + repo.ImageName + "/tags/list"
 
-		spaceClient := http.Client{
-			Timeout: time.Second * 10, // Timeout after 10 seconds
+		req := request{
+			url:   url,
+			token: auth.AccessToken,
 		}
 
-		body, err := getWithAuth(spaceClient, url, auth.AccessToken)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		tags := TagsResponse{}
-		jsonErr := json.Unmarshal(body, &tags)
-		if jsonErr != nil {
-			log.Fatal(jsonErr)
-		}
+		go concFetchTags(req, &wg, queue)
 
 		//log.Println(string(body))
 		//log.Println("")
 
-		list.TagsResponses = append(list.TagsResponses, tags)
+	}
+
+	wg.Wait() // blocks here
+
+	for range catalog.Repositories {
+		item := <-queue
+
+		list.TagsResponses = append(list.TagsResponses, item)
 	}
 
 	return list
