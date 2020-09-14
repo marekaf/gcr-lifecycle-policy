@@ -81,7 +81,7 @@ func printBeforeCleanup(list FilteredList) {
 
 }
 
-// Print prints the report in a pretty table output
+// PrintList prints the report in a pretty table output
 func PrintList(list ListResponse) {
 
 	t := table.NewWriter()
