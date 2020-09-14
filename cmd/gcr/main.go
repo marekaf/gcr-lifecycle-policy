@@ -17,9 +17,11 @@ var (
 	retentionDays  int
 	kubeconfigPath string
 	registryPrefix string
+	dryRun         bool
 
 	// default values
 	repoFilterDefault     = []string{}
+	dryRunDefault         = true
 	logLevelDefault       = "ERROR"
 	keepTagsDefault       = 10
 	retentionDaysDefault  = 365
@@ -80,7 +82,8 @@ func init() {
 
 	// cleanup command
 	cleanupCmd.PersistentFlags().IntVar(&keepTags, "keep-tags", keepTagsDefault, "number of tags to keep per image")
-	cleanupCmd.PersistentFlags().IntVar(&retentionDays, "retention", retentionDays, "number of days of retention to keep images")
+	cleanupCmd.PersistentFlags().IntVar(&retentionDays, "retention", retentionDaysDefault, "number of days of retention to keep images")
+	cleanupCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", dryRunDefault, "dry-run for images cleaning")
 
 }
 
@@ -122,6 +125,7 @@ func cleanup(cmd *cobra.Command, args []string) {
 		RetentionDays:  retentionDays,
 		RegistryURL:    registryPrefix,
 		KubeconfigPath: kubeconfigPath,
+		DryRun:         dryRun,
 	}
 
 	worker.HandleCleanup(config)

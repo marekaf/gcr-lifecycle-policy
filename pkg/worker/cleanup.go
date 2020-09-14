@@ -1,10 +1,11 @@
 package worker
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"golang.org/x/oauth2"
 )
@@ -15,6 +16,8 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 		Timeout: time.Second * 10, // Timeout after 10 seconds
 	}
 
+	deleted := 0
+
 	for _, repo := range list.TagsResponses {
 
 		for _, digest := range repo.Manifest {
@@ -24,39 +27,43 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 
 				url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + tag
 
-				body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
-				if err != nil {
-					log.Fatal(err)
+				if c.DryRun {
+					log.Debugf("not calling HTTP DELETE %s because dryRun is enabled", url)
+				} else {
+					body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					log.Println(string(body))
+					// TODO: we should probably read the response body
 				}
-
-				// tags := TagsResponse{}
-				// jsonErr := json.Unmarshal(body, &tags)
-				// if jsonErr != nil {
-				// 	log.Fatal(jsonErr)
-				// }
-
-				log.Println(string(body))
-
 			}
 
 			// second delete the image by referencing the manifest itself
 			url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + digest.Name
 
-			body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
-			if err != nil {
-				log.Fatal(err)
+			deleted++
+
+			if c.DryRun {
+				log.Debugf("not calling HTTP DELETE %s because dryRun is enabled", url)
+			} else {
+				body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
+				if err != nil {
+					log.Fatal(err)
+				}
+
+				log.Println(string(body))
+				// TODO: we should probably read the response body
 			}
-
-			// tags := TagsResponse{}
-			// jsonErr := json.Unmarshal(body, &tags)
-			// if jsonErr != nil {
-			// 	log.Fatal(jsonErr)
-			// }
-
-			log.Println(string(body))
-
 		}
 
+	}
+
+	if c.DryRun {
+		log.Infof("Total number of images deleted: '%d' (dryRun is enabled, so nothing was deleted!)", deleted)
+	} else {
+		log.Infof("Total number of images deleted: '%d'", deleted)
 	}
 }
 
