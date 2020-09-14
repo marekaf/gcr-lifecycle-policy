@@ -8,6 +8,18 @@ import (
 	_ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 
+// HandleListCatalog function
+func HandleListCatalog(c Config) Catalog {
+
+	token := getToken(c.CredsFile)
+
+	catalog := fetchCatalog(c, token)
+
+	filteredCatalog := filterCatalog(catalog, c.RepoFilter)
+
+	return filteredCatalog
+}
+
 // HandleList function
 func HandleList(c Config) ListResponse {
 
