@@ -41,13 +41,6 @@ var (
 		Run:   list,
 	}
 
-	listCatalogCmd = &cobra.Command{
-		Use:   "list-catalog",
-		Short: "",
-		Long:  "",
-		Run:   listCatalog,
-	}
-
 	listReposCmd = &cobra.Command{
 		Use:   "list-repos",
 		Short: "",
@@ -75,7 +68,6 @@ func init() {
 	// commands
 	rootCmd.AddCommand(listCmd)
 	rootCmd.AddCommand(listReposCmd)
-	rootCmd.AddCommand(listCatalogCmd)
 	rootCmd.AddCommand(listClusterCmd)
 	rootCmd.AddCommand(cleanupCmd)
 
@@ -148,21 +140,6 @@ func list(cmd *cobra.Command, args []string) {
 
 	result := worker.HandleList(config)
 	worker.PrintList(result)
-}
-
-func listCatalog(cmd *cobra.Command, args []string) {
-
-	// set loglevel
-	setLogLevel()
-
-	config := worker.Config{
-		CredsFile:   credsFile,
-		RepoFilter:  repoFilter,
-		RegistryURL: registryPrefix,
-	}
-
-	result := worker.HandleListCatalog(config)
-	worker.PrintListRepos(result)
 }
 
 func listRepos(cmd *cobra.Command, args []string) {
