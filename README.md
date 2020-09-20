@@ -52,3 +52,4 @@ I'm planning on using this in gitlab-ci scheduled pipeline - once a week to run 
 
 ## TODO:
 try to make use of `https://github.com/google/go-containerregistry/tree/master`
+fix {"errors":[{"code":"DENIED","message":"Cloud Resource Manager API has not been used in project 50963927524 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=50963927524 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."}]}
