@@ -2,10 +2,11 @@ package worker
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	log "github.com/sirupsen/logrus"
 
 	"golang.org/x/oauth2"
 )
@@ -15,6 +16,8 @@ func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 	// TODO: make this configurable
 	url := "https://" + c.RegistryURL + "/v2/_catalog"
 
+	log.Debugf("fetching catalog from url %s", url)
+
 	spaceClient := http.Client{
 		Timeout: time.Second * 10, // Timeout after 10 seconds
 	}
@@ -23,6 +26,8 @@ func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	log.Debugf("got reponse, will unmarshal now %s", string(body))
 
 	catalogResp := CatalogResponse{}
 	jsonErr := json.Unmarshal(body, &catalogResp)

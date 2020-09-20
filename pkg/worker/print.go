@@ -69,9 +69,9 @@ func printBeforeCleanup(list FilteredList) {
 
 			i++
 
-			if i > 100 {
-				break
-			}
+			// if i > 100 {
+			// 	break
+			// }
 		}
 
 	}
@@ -128,13 +128,13 @@ func PrintListRepos(cat Catalog) {
 
 	t := table.NewWriter()
 	t.SetOutputMirror(os.Stdout)
-	t.AppendHeader(table.Row{"#", "REPO", "IMAGE_NAME", "TAG"})
+	t.AppendHeader(table.Row{"#", "REPO", "IMAGE_NAME"})
 
 	i := 0
 
 	for _, repo := range cat.Repositories {
 
-		t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName, repo.Tag})
+		t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName})
 
 		i++
 	}

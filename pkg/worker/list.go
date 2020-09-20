@@ -1,7 +1,7 @@
 package worker
 
 import (
-
+	log "github.com/sirupsen/logrus"
 	// kubernetes
 
 	// we need this for our oauth2 token
@@ -27,7 +27,11 @@ func HandleListRepos(c Config) Catalog {
 
 	token := getToken(c.CredsFile)
 
+	log.Debugf("got token %s", token.AccessToken)
+
 	catalog := fetchCatalog(c, token)
+
+	log.Debugf("got catalog %s", catalog)
 
 	return catalog
 }

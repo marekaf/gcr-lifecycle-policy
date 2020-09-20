@@ -1,5 +1,7 @@
 package worker
 
+import log "github.com/sirupsen/logrus"
+
 func filterCatalog(c Catalog, filter []string) Catalog {
 
 	// by default do not filter anything
@@ -13,9 +15,12 @@ func filterCatalog(c Catalog, filter []string) Catalog {
 
 		for _, filterRepo := range filter {
 			if (repo.RepositoryPrefix + repo.ImageName) == filterRepo {
+				log.Debugf("repo %s matched the filter", filterRepo)
 				filtered.Repositories = append(filtered.Repositories, repo)
 				break
 			}
+
+			log.Debugf("repo %s did not match the filter %s", repo.RepositoryPrefix+repo.ImageName, filterRepo)
 		}
 	}
 
@@ -75,26 +80,22 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 
 			if keepCounter < keep {
 				keepCounter++
-				//fmt.Printf("not deleting digest %+v because keep-tags (%d/%d)", digest, keepCounter, keep)
+				log.Debugf("not deleting digest %+v because keep-tags (%d/%d)", digest, keepCounter, keep)
 				continue
 			}
 
 			if existsInCluster(clusterCat, digest, image.Name) {
-				//fmt.Printf("not deleting digest %+v because existsInCluster", digest)
+				log.Debugf("not deleting digest %+v because existsInCluster", digest)
 				continue
 			}
 
 			// always delete untagged images
 			if digestHasTags(digest) && !olderThanRetention(digest, retention) {
-				if digestHasTags(digest) {
-					//fmt.Printf("not deleting digest %+v because digestHasTags", digest)
-				} else {
-					//fmt.Printf("not deleting digest %+v because !olderThanRetention (%s)", digest, retention)
-				}
+				log.Debugf("not deleting digest %+v because digestHasTags && !olderThanRetention (%s)", digest, retention)
 				continue
 			}
 
-			//fmt.Printf("deleting digest %+v", digest)
+			log.Debugf("adding digest %+v to cleanupList", digest)
 			// TODO: we should delete all tags before we delete the image
 			filteredManifests[digest.Name] = Digest(digest)
 

@@ -44,6 +44,8 @@ func reqWithAuth(req *http.Request, c http.Client, url string, token string) ([]
 
 	req.Header.Set("Authorization", "Bearer "+token)
 
+	req.Header.Set("Content-Type", "application/json")
+
 	res, getErr := c.Do(req)
 	if getErr != nil {
 		return nil, getErr

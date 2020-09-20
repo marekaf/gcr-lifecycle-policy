@@ -23,7 +23,9 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 		for _, digest := range repo.Manifest {
 
 			// first delete all tags to prevent GOOGLE_MANIFEST_DANGLING_TAG error
-			for _, tag := range repo.Tags {
+			for _, tag := range digest.Tag {
+
+				log.Infof("cleaning up tag: %s", tag)
 
 				url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + tag
 
@@ -43,6 +45,7 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 			// second delete the image by referencing the manifest itself
 			url := "https://" + c.RegistryURL + "/v2/" + repo.Name + "/manifests/" + digest.Name
 
+			log.Infof("cleaning up image: %s", digest.Name)
 			deleted++
 
 			if c.DryRun {
