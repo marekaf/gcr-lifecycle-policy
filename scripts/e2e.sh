@@ -49,20 +49,6 @@ repush busybox
 repush mariadb
 repush mariadb:beta
 
-
-
-# docker pull redis
-# docker pull redis:alpine
-# docker pull redis:5.0
-# docker pull redis:6.0
-# docker pull mysql:5.7
-# docker pull mysql:5.6
-# docker pull traefik
-# docker pull postgres
-# docker pull busybox
-# docker pull mariadb
-# docker pull mariadb:beta
-
 make build && ./bin/gcr list --log-level INFO
 
 ./bin/gcr cleanup --log-level DEBUG --retention 0 --keep-tags=0 --dry-run=true

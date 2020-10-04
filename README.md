@@ -1,25 +1,39 @@
 # GCR Retention policy
-This `bash/jq` script packaged in Docker image is handling retention policy of images in Google Container Registry.
+This simple golang CLI tool is handling retention policy of images in Google Container Registry.
 
-It scans all the GCR images (it supports paths like `eu.gcr.io/my-project/foo/bar/my-service:123`) and fetches their tags using Docker v2 API. Then it deletes some of them.
+It scans all the GCR images (it supports paths like `eu.gcr.io/my-project/foo/bar/my-service:123`) and fetches their tags using Docker v2 API. Then it deletes some of them based on parametrized filters and input GKE clusters.
+
+![](/assets/render.gif)
 
 ## Retention policy configuration
 
-It queries all pods and replicasets in the GKE cluster and prevents these image tags before deleting.
+Using `--cluster path/to/kubeconfig` it queries all pods and replicasets in the GKE cluster and prevents these image tags before deleting.
 
-It uses `RETENTION_DAYS` to delete images older than this value.
+```
+$ gcr cleanup --help
+Usage:
+  gcr cleanup [flags]
 
-It uses `KEEP_TAGS` number to keep the `KEEP_TAGS` most recent tags
+Flags:
+      --dry-run         dry-run for images cleaning (default true)
+  -h, --help            help for cleanup
+      --keep-tags int   number of tags to keep per image (default 10)
+      --retention int   number of days of retention to keep images (default 365)
 
-`TODO`: This is only a dry run. Check the `entrypoint.sh` to uncomment the section that does digest deletion. I'm planning on enabling and disabling dry-run via ENV vars but when I properly test this in production and get some confidence.
+Global Flags:
+      --cluster string      kubeconfig path (default "/Users/marek/.kube/config")
+      --creds string        credential file (default "./creds/serviceaccount.json")
+      --log-level string    log level (default "ERROR")
+      --registry string     GCR url to use (default "eu.gcr.io")
+      --repos stringArray   list of repos you want to work with
+```
 
 `WARNING`: This is an alpha version! Be very careful using this in production.
 
-`TODO`: I want to rewrite this to python using `pykube-ng` and `docker-py`.
-
 ## How to build it
 ```
-docker build -t gcr-retention:0.0.1 .
+make dep
+make build
 ```
 
 ## How to run it
@@ -37,19 +51,14 @@ Storage Object Admin
 ### run it
 
 ```
-docker run -it -e PROJECT_ID=my-project \
-  -e GCLOUD_SERVICE_KEY="$(cat serviceaccount.json| base64)"  \
-  -e KEEP_TAGS=10 -e RETENTION_DAYS=365 \
-  -e REPOSITORY='eu.gcr.io/my-project' \
-  -e ZONE="europe-west1-b" \
-  -e CLUSTER_NAME="prod" \
-    gcr-retention:0.0.1
+make build && ./bin/gcr --help
 ```
 
-### deploy it
-I'm planning on using this in gitlab-ci scheduled pipeline - once a week to run this container with proper ENV vars, passing it the service account in base64 in gitlab secrets.
-
-
 ## TODO:
-try to make use of `https://github.com/google/go-containerregistry/tree/master`
-fix {"errors":[{"code":"DENIED","message":"Cloud Resource Manager API has not been used in project 50963927524 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=50963927524 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."}]}
+- release binary to Github Release
+- release docker image to Docker Hub
+- try to make use of `https://github.com/google/go-containerregistry/tree/master`
+- fix {"errors":[{"code":"DENIED","message":"Cloud Resource Manager API has not been used in project 50963927524 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=50963927524 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."}]}
+- support Cloud Run in `--cluster` (not it supports only GKE)
+- prepare example deployment for Cloud Scheduler + Cloud Run (or Cloud Functions)
+- make the horrible code a bit less horrible and more reusable
