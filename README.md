@@ -58,7 +58,6 @@ make build && ./bin/gcr --help
 - release binary to Github Release
 - release docker image to Docker Hub
 - try to make use of `https://github.com/google/go-containerregistry/tree/master`
-- fix {"errors":[{"code":"DENIED","message":"Cloud Resource Manager API has not been used in project 50963927524 before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/cloudresourcemanager.googleapis.com/overview?project=50963927524 then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry."}]}
 - support Cloud Run in `--cluster` (not it supports only GKE)
 - prepare example deployment for Cloud Scheduler + Cloud Run (or Cloud Functions)
 - make the horrible code a bit less horrible and more reusable
