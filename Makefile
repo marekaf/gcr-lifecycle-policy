@@ -3,7 +3,7 @@ PKG := "github.com/marekaf/gcr-lifecycle-policy"
 PKG_LIST := $(shell go list ${PKG}/... | grep -v /vendor/)
 GO_FILES := $(shell find . -name '*.go' | grep -v /vendor/ | grep -v _test.go)
 
-.PHONY: all dep build clean test coverage coverhtml lint
+.PHONY: all dep build test lint
 
 all: build
 
@@ -26,3 +26,6 @@ test: ## Run unittests
 dep: ## Get the dependencies
 	@go get -v -d ./...
 	@go get -u golang.org/x/lint/golint
+
+e2e: ## run E2E tests
+	./scripts/e2e.sh
