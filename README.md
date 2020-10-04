@@ -61,3 +61,6 @@ make build && ./bin/gcr --help
 - support Cloud Run in `--cluster` (not it supports only GKE)
 - prepare example deployment for Cloud Scheduler + Cloud Run (or Cloud Functions)
 - make the horrible code a bit less horrible and more reusable
+
+# deprecation info
+this tool used bash/jq before and the code is still kept [here](https://github.com/marekaf/gcr-lifecycle-policy/releases/tag/0.1). I will not continue maintaining the bash/jq version but focus purely in the new one in Go.
