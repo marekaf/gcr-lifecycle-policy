@@ -1,5 +1,5 @@
 # GCR Retention policy
-This simple golang CLI tool is handling retention policy of images in Google Container Registry.
+This simple golang CLI tool is handling retention policy of images in Google Container Registry in a similar manner as Elastic Container Registry does (original [blogpost talking about the details here](https://blog.marekbartik.com/posts/2019-09-26_google-container-registry-lifecycle-policy-for-images-retention/))
 
 It scans all the GCR images (it supports paths like `eu.gcr.io/my-project/foo/bar/my-service:123`) and fetches their tags using Docker v2 API. Then it deletes some of them based on parametrized filters and input GKE clusters.
 
