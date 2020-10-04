@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/marekaf/gcr-lifecycle-policy/pkg/worker"
+	"github.com/marekaf/gcr-lifecycle-policy/internal/worker"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

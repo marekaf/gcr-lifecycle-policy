@@ -1,0 +1,187 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: zsh
+  
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /Users /Downloads/Projects/gcr-lifecycle-policy
+  
+  # Export additional ENV variables
+  env:
+    recording: true
+  
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 140
+  
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 30
+  
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+  
+  # Quality
+  # 1 - 100
+  quality: 100
+  
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+  
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 2000
+  
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: floating
+    title: Terminalizer
+    style:
+      border: 0px black solid
+      # boxShadow: none
+      # margin: 0px
+  
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+  
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+  
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: "Monaco, Lucida Console, Ubuntu Mono, Monospace"
+  
+  # The size of the font
+  fontSize: 12
+  
+  # The height of lines
+  lineHeight: 1
+  
+  # The spacing between letters
+  letterSpacing: 0
+  
+  # Theme
+  theme:
+    background: "transparent"
+    foreground: "#afafaf"
+    cursor: "#c7c7c7"
+    black: "#232628"
+    red: "#fc4384"
+    green: "#b3e33b"
+    yellow: "#ffa727"
+    blue: "#75dff2"
+    magenta: "#ae89fe"
+    cyan: "#708387"
+    white: "#d5d5d0"
+    brightBlack: "#626566"
+    brightRed: "#ff7fac"
+    brightGreen: "#c8ed71"
+    brightYellow: "#ebdf86"
+    brightBlue: "#75dff2"
+    brightMagenta: "#ae89fe"
+    brightCyan: "#b1c6ca"
+    brightWhite: "#f9f9f4"
+  
+# Records, feel free to edit them
+records:
+  - delay: 2716
+    content: 'pipetail:gcr-lifecycle-policy $ '
+  - delay: 1217
+    content: g
+  - delay: 189
+    content: c
+  - delay: 222
+    content: r
+  - delay: 89
+    content: ' '
+  - delay: 103
+    content: l
+  - delay: 159
+    content: i
+  - delay: 109
+    content: s
+  - delay: 188
+    content: t
+  - delay: 261
+    content: "\r\n"
+  - delay: 1341
+    content: "+----+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\n|  # | REPO                  | IMAGE_NAME | DIGEST                       | IMAGE_TAG       | SIZE     | DATE_CREATED | DATE_UPLOADED |\r\n+----+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\n|  0 | gcr-lifecycle-policy/ | traefik    | sha256:0d52e99b9368467d8ceb… | latest          | 28.4 MB  | 2020-30-09   | 2020-02-10    |\r\n|  1 | gcr-lifecycle-policy/ | postgres   | sha256:c4ba3b8e9b3d55831b86… | latest          | 114.7 MB | 2020-24-09   | 2020-02-10    |\r\n|  2 | gcr-lifecycle-policy/ | mariadb    | sha256:5d8f0d6ef1de0d626fc2… | beta            | 114.7 MB | 2020-24-04   | 2020-02-10    |\r\n|  3 | gcr-lifecycle-policy/ | mariadb    | sha256:6955c063991fc6ee57fc… | latest          | 125.5 MB | 2020-26-09   | 2020-02-10    |\r\n|  4 | gcr-lifecycle-policy/ | redis      | sha256:02d2467210e76794c98a… | 6.0,latest      | 38.2 MB  | 2020-10-09   | 2020-02-10    |\r\n|  5 | gcr-lifecycle-policy/ | redis      | sha256:72515526251e96f6b523… | 5.0             | 35.9 MB  | 2020-10-09   | 2020-02-10    |\r\n|  6 | gcr-lifecycle-policy/ | busybox    | sha256:2ca5e69e244d2da7368f… | latest          | 764.6 kB | 2020-09-09   | 2020-02-10    |\r\n|  7 | gcr-lifecycle-policy/ | webapp     | sha256:794275d96b4ab96eeb95… | dev,latest,v1.0 | 53.5 MB  | 2020-10-09   | 2020-02-10    |\r\n|  8 | gcr-lifecycle-policy/ | mysql      | sha256:9e902247f80eca2e0fc4… | 5.7             | 154.5 MB | 2020-10-09   | 2020-02-10    |\r\n|  9 | gcr-lifecycle-policy/ | mysql      | sha256:b589f11ab39a852fd130… | latest          | 158.6 MB | 2020-10-09   | 2020-02-10    |\r\n| 10 | gcr-lifecycle-policy/ | mysql      | sha256:bfcef110bc3892d329ea… | 5.6             | 102.9 MB | 2020-10-09   | 2020-02-10    |\r\n| 11 | gcr-lifecycle-policy/ | nginx      | sha256:794275d96b4ab96eeb95… | 1,latest,master | 53.5 MB  | 2020-10-09   | 2020-02-10    |\r\n+----+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\n|    |                       |            |                              | TOTAL SIZE      | 981.2 MB |              |               |\r\n+----+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\npipetail:gcr-lifecycle-policy $ "
+  - delay: 6771
+    content: gcr cleanup  --retention 20 --keep-tags=1 --dry-run=true
+  - delay: 1386
+    content: "\r\n"
+  - delay: 3335
+    content: "+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n| # | REPO                  | IMAGE_NAME | DIGEST                       | IMAGE_TAG          | SIZE     | DATE_CREATED | DATE_UPLOADED |\r\n+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n| 0 | gcr-lifecycle-policy/ | mysql      | sha256:9e902247f80eca2e0fc4… | 5.7                | 154.5 MB | 2020-10-09   | 2020-02-10    |\r\n| 1 | gcr-lifecycle-policy/ | mysql      | sha256:bfcef110bc3892d329ea… | 5.6                | 102.9 MB | 2020-10-09   | 2020-02-10    |\r\n| 2 | gcr-lifecycle-policy/ | redis      | sha256:72515526251e96f6b523… | 5.0                | 35.9 MB  | 2020-10-09   | 2020-02-10    |\r\n+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n|   |                       |            |                              | TOTAL SIZE TO SAVE | 293.3 MB |              |               |\r\n+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\npipetail:gcr-lifecycle-policy $ "
+  - delay: 2544
+    content: gcr cleanup  --retention 20 --keep-tags=1 --dry-run=true
+  - delay: 599
+    content: "\b\e[K"
+  - delay: 163
+    content: "\b\e[K"
+  - delay: 150
+    content: "\b\e[K"
+  - delay: 361
+    content: "\b\e[K"
+  - delay: 660
+    content: f
+  - delay: 116
+    content: a
+  - delay: 150
+    content: l
+  - delay: 72
+    content: s
+  - delay: 170
+    content: e
+  - delay: 4332
+    content: "\r\n"
+  - delay: 2856
+    content: "+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n| # | REPO                  | IMAGE_NAME | DIGEST                       | IMAGE_TAG          | SIZE     | DATE_CREATED | DATE_UPLOADED |\r\n+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n| 0 | gcr-lifecycle-policy/ | redis      | sha256:72515526251e96f6b523… | 5.0                | 35.9 MB  | 2020-10-09   | 2020-02-10    |\r\n| 1 | gcr-lifecycle-policy/ | mysql      | sha256:bfcef110bc3892d329ea… | 5.6                | 102.9 MB | 2020-10-09   | 2020-02-10    |\r\n| 2 | gcr-lifecycle-policy/ | mysql      | sha256:9e902247f80eca2e0fc4… | 5.7                | 154.5 MB | 2020-10-09   | 2020-02-10    |\r\n+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n|   |                       |            |                              | TOTAL SIZE TO SAVE | 293.3 MB |              |               |\r\n+---+-----------------------+------------+------------------------------+--------------------+----------+--------------+---------------+\r\n"
+  - delay: 7257
+    content: 'pipetail:gcr-lifecycle-policy $ '
+  - delay: 1451
+    content: g
+  - delay: 201
+    content: c
+  - delay: 217
+    content: r
+  - delay: 112
+    content: ' '
+  - delay: 68
+    content: l
+  - delay: 187
+    content: i
+  - delay: 95
+    content: s
+  - delay: 217
+    content: t
+  - delay: 276
+    content: "\r\n"
+  - delay: 1372
+    content: "+---+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\n| # | REPO                  | IMAGE_NAME | DIGEST                       | IMAGE_TAG       | SIZE     | DATE_CREATED | DATE_UPLOADED |\r\n+---+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\n| 0 | gcr-lifecycle-policy/ | traefik    | sha256:0d52e99b9368467d8ceb… | latest          | 28.4 MB  | 2020-30-09   | 2020-02-10    |\r\n| 1 | gcr-lifecycle-policy/ | postgres   | sha256:c4ba3b8e9b3d55831b86… | latest          | 114.7 MB | 2020-24-09   | 2020-02-10    |\r\n| 2 | gcr-lifecycle-policy/ | redis      | sha256:02d2467210e76794c98a… | 6.0,latest      | 38.2 MB  | 2020-10-09   | 2020-02-10    |\r\n| 3 | gcr-lifecycle-policy/ | nginx      | sha256:794275d96b4ab96eeb95… | 1,latest,master | 53.5 MB  | 2020-10-09   | 2020-02-10    |\r\n| 4 | gcr-lifecycle-policy/ | mysql      | sha256:b589f11ab39a852fd130… | latest          | 158.6 MB | 2020-10-09   | 2020-02-10    |\r\n| 5 | gcr-lifecycle-policy/ | webapp     | sha256:794275d96b4ab96eeb95… | dev,latest,v1.0 | 53.5 MB  | 2020-10-09   | 2020-02-10    |\r\n| 6 | gcr-lifecycle-policy/ | mariadb    | sha256:5d8f0d6ef1de0d626fc2… | beta            | 114.7 MB | 2020-24-04   | 2020-02-10    |\r\n| 7 | gcr-lifecycle-policy/ | mariadb    | sha256:6955c063991fc6ee57fc… | latest          | 125.5 MB | 2020-26-09   | 2020-02-10    |\r\n| 8 | gcr-lifecycle-policy/ | busybox    | sha256:2ca5e69e244d2da7368f… | latest          | 764.6 kB | 2020-09-09   | 2020-02-10    |\r\n+---+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\n|   |                       |            |                              | TOTAL SIZE      | 687.9 MB |              |               |\r\n+---+-----------------------+------------+------------------------------+-----------------+----------+--------------+---------------+\r\npipetail:gcr-lifecycle-policy $ "
