@@ -1,7 +1,7 @@
 # GCR Retention policy
-This simple golang CLI tool is handling retention policy of images in Google Container Registry in a similar manner as Elastic Container Registry does (original [blogpost talking about the details here](https://blog.marekbartik.com/posts/2019-09-26_google-container-registry-lifecycle-policy-for-images-retention/))
+This simple golang CLI tool is handling retention policy of images in Google Container Registry (and Google Artifact Registry for Docker) in a similar manner as Elastic Container Registry does (original [blogpost talking about the details here](https://blog.marekbartik.com/posts/2019-09-26_google-container-registry-lifecycle-policy-for-images-retention/))
 
-It scans all the GCR images (it supports paths like `eu.gcr.io/my-project/foo/bar/my-service:123`) and fetches their tags using Docker v2 API. Then it deletes some of them based on parametrized filters and input GKE clusters.
+It scans all the Docker registry images (it supports paths like `eu.gcr.io/my-project/foo/bar/my-service:123`) and fetches their tags using Docker v2 API. Then it deletes some of them based on parametrized filters and input GKE clusters.
 
 ![](/assets/render.gif)
 
@@ -26,7 +26,10 @@ Global Flags:
       --log-level string    log level (default "ERROR")
       --registry string     GCR url to use (default "eu.gcr.io")
       --repos stringArray   list of repos you want to work with
+      --sort-by string      field to sort images by (default "timeCreatedMs")
 ```
+
+`TIP`: For Google Artifact Registry use `--sort-by="timeUploadedMs"`
 
 `WARNING`: This is an alpha version! Be very careful using this in production.
 
@@ -46,6 +49,7 @@ Kubernetes Engine Cluster Viewer
 Kubernetes Engine Developer
 Kubernetes Engine Service Agent
 Storage Object Admin
+Artifact Registry Repository Administrator
 ```
 
 ### run it

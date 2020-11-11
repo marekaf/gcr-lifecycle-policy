@@ -17,6 +17,7 @@ var (
 	retentionDays  int
 	kubeconfigPath string
 	registryPrefix string
+	sortby         string
 	dryRun         bool
 
 	// default values
@@ -27,6 +28,7 @@ var (
 	retentionDaysDefault  = 365
 	credsFileDefault      = "./creds/serviceaccount.json"
 	registryPrefixDefault = "eu.gcr.io"
+	sortbyDefault         = "timeCreatedMs"
 	kubeconfigPathDefault = filepath.Join(homeDir(), ".kube", "config")
 
 	// commands
@@ -76,6 +78,7 @@ func init() {
 	// root command
 	rootCmd.PersistentFlags().StringVar(&credsFile, "creds", credsFileDefault, "credential file")
 	rootCmd.PersistentFlags().StringVar(&registryPrefix, "registry", registryPrefixDefault, "GCR url to use")
+	rootCmd.PersistentFlags().StringVar(&sortby, "sort-by", sortbyDefault, "field to sort images by")
 	rootCmd.PersistentFlags().StringArrayVar(&repoFilter, "repos", repoFilterDefault, "list of repos you want to work with")
 	rootCmd.PersistentFlags().StringVar(&logLevel, "log-level", logLevelDefault, "log level")
 	rootCmd.PersistentFlags().StringVar(&kubeconfigPath, "cluster", kubeconfigPathDefault, "kubeconfig path")
@@ -124,6 +127,7 @@ func cleanup(cmd *cobra.Command, args []string) {
 		KeepTags:       keepTags,
 		RetentionDays:  retentionDays,
 		RegistryURL:    registryPrefix,
+		SortBy:         sortby,
 		KubeconfigPath: kubeconfigPath,
 		DryRun:         dryRun,
 	}
@@ -140,6 +144,7 @@ func list(cmd *cobra.Command, args []string) {
 		CredsFile:   credsFile,
 		RepoFilter:  repoFilter,
 		RegistryURL: registryPrefix,
+		SortBy:      sortby,
 	}
 
 	result := worker.HandleList(config)
@@ -155,6 +160,7 @@ func listRepos(cmd *cobra.Command, args []string) {
 		CredsFile:   credsFile,
 		RepoFilter:  repoFilter,
 		RegistryURL: registryPrefix,
+		SortBy:      sortby,
 	}
 
 	result := worker.HandleListRepos(config)
@@ -171,6 +177,7 @@ func listCluster(cmd *cobra.Command, args []string) {
 		RepoFilter:     repoFilter,
 		KubeconfigPath: kubeconfigPath,
 		RegistryURL:    registryPrefix,
+		SortBy:         sortby,
 	}
 
 	result := worker.HandleListCluster(config)
