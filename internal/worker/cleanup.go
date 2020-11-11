@@ -2,7 +2,6 @@ package worker
 
 import (
 	"net/http"
-	"strconv"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -68,18 +67,6 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 	} else {
 		log.Infof("Total number of images deleted: '%d'", deleted)
 	}
-}
-
-func olderThanRetention(d Digest, retention time.Time) bool {
-
-	timecreated, err := strconv.ParseInt(d.TimeCreatedMs, 10, 64)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// retention is in days, convert it to ms
-	return time.Unix(timecreated/1000, 0).Before(retention)
 }
 
 // HandleCleanup function

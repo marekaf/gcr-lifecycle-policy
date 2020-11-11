@@ -4,6 +4,7 @@ import (
 	"log"
 	"sort"
 	"strconv"
+	"time"
 )
 
 // ByTimeCreated implements sort.Interface for []Digest based on
@@ -24,10 +25,29 @@ func (a ByTimeCreated) Less(i, j int) bool {
 	}
 
 	return inum < jnum
-
 }
 
-func toSortedSlice(m map[string]Digest) []Digest {
+// ByTimeUploaded implements sort.Interface for []Digest based on
+// the TimeUploadedMs field.
+type ByTimeUploaded []Digest
+
+func (a ByTimeUploaded) Len() int      { return len(a) }
+func (a ByTimeUploaded) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+func (a ByTimeUploaded) Less(i, j int) bool {
+	inum, err := strconv.Atoi(a[i].TimeUploadedMs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	jnum, err := strconv.Atoi(a[j].TimeUploadedMs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return inum < jnum
+}
+
+func toSortedSlice(sortBy string, m map[string]Digest) []Digest {
 
 	digests := make([]Digest, 0, len(m))
 
@@ -36,7 +56,42 @@ func toSortedSlice(m map[string]Digest) []Digest {
 		digests = append(digests, v)
 
 	}
-	sort.Sort(ByTimeCreated(digests))
+	switch sortBy {
+
+	case "timeCreatedMs":
+		sort.Sort(ByTimeCreated(digests))
+
+	case "timeUploadedMs":
+		sort.Sort(ByTimeUploaded(digests))
+
+	default:
+		log.Fatalf("wrong parameter for sorting. Supported: [timeCreatedMs, timeUploadedMs]. Provided: [%s]", sortBy)
+	}
 
 	return digests
+}
+
+func olderThanRetention(sortBy string, d Digest, retention time.Time) bool {
+
+	var err error
+	var timestamp int64
+
+	switch sortBy {
+
+	case "timeCreatedMs":
+		timestamp, err = strconv.ParseInt(d.TimeCreatedMs, 10, 64)
+
+	case "timeUploadedMs":
+		timestamp, err = strconv.ParseInt(d.TimeUploadedMs, 10, 64)
+
+	default:
+		log.Fatalf("wrong parameter for sorting. Supported: [timeCreatedMs, timeUploadedMs]. Provided: [%s]", sortBy)
+	}
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// retention is in seconds, convert it to ms
+	return time.Unix(timestamp/1000, 0).Before(retention)
 }

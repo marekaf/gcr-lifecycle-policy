@@ -76,7 +76,7 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 			Tags:     image.Tags,
 		}
 
-		sortedDigests := toSortedSlice(image.Manifest)
+		sortedDigests := toSortedSlice(c.SortBy, image.Manifest)
 
 		keepCounter := 0
 
@@ -94,7 +94,7 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 			}
 
 			// always delete untagged images
-			if digestHasTags(digest) && !olderThanRetention(digest, retention) {
+			if digestHasTags(digest) && !olderThanRetention(c.SortBy, digest, retention) {
 				log.Debugf("not deleting digest %+v because digestHasTags && !olderThanRetention (%s)", digest, retention)
 				continue
 			}

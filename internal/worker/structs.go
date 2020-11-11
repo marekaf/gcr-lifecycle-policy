@@ -49,6 +49,7 @@ type Config struct {
 	RetentionDays  int
 	KubeconfigPath string
 	RegistryURL    string
+	SortBy         string
 	DryRun         bool
 }
 
