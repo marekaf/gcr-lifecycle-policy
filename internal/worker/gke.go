@@ -29,6 +29,11 @@ func fetchImagesFromCluster(c Config) Catalog {
 
 	cat := Catalog{}
 
+	if c.KubeconfigPath == "" {
+		// no kubeconfig provided, return empty catalog
+		return cat
+	}
+
 	config, err := clientcmd.BuildConfigFromFlags("", c.KubeconfigPath)
 	if err != nil {
 		log.Fatalf("could not build kubernetes config: %s", err)
