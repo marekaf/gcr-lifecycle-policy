@@ -13,6 +13,8 @@ type ByTimeCreated []Digest
 
 func (a ByTimeCreated) Len() int      { return len(a) }
 func (a ByTimeCreated) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+
+// Less interprets as i "is newer than" / "happened after" j
 func (a ByTimeCreated) Less(i, j int) bool {
 	inum, err := strconv.Atoi(a[i].TimeCreatedMs)
 	if err != nil {
@@ -24,7 +26,7 @@ func (a ByTimeCreated) Less(i, j int) bool {
 		log.Fatal(err)
 	}
 
-	return inum < jnum
+	return inum > jnum
 }
 
 // ByTimeUploaded implements sort.Interface for []Digest based on
@@ -33,7 +35,10 @@ type ByTimeUploaded []Digest
 
 func (a ByTimeUploaded) Len() int      { return len(a) }
 func (a ByTimeUploaded) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+
+// Less interprets as i "is newer than" / "happened after" j
 func (a ByTimeUploaded) Less(i, j int) bool {
+
 	inum, err := strconv.Atoi(a[i].TimeUploadedMs)
 	if err != nil {
 		log.Fatal(err)
@@ -44,7 +49,7 @@ func (a ByTimeUploaded) Less(i, j int) bool {
 		log.Fatal(err)
 	}
 
-	return inum < jnum
+	return inum > jnum
 }
 
 func toSortedSlice(sortBy string, m map[string]Digest) []Digest {
@@ -54,8 +59,8 @@ func toSortedSlice(sortBy string, m map[string]Digest) []Digest {
 	for k, v := range m {
 		v.Name = k
 		digests = append(digests, v)
-
 	}
+
 	switch sortBy {
 
 	case "timeCreatedMs":
