@@ -56,8 +56,8 @@ func printBeforeCleanup(list FilteredList) {
 
 			timecreated, _ := strconv.ParseInt(manifest.TimeCreatedMs, 10, 64)
 			timeuploaded, _ := strconv.ParseInt(manifest.TimeUploadedMs, 10, 64)
-			ageReadable := time.Unix(timecreated/1000, 0).Format("2006-02-01")
-			uploadedReadable := time.Unix(timeuploaded/1000, 0).Format("2006-02-01")
+			ageReadable := time.Unix(timecreated/1000, 0).Format(time.RFC3339)
+			uploadedReadable := time.Unix(timeuploaded/1000, 0).Format(time.RFC3339)
 
 			tmp, _ := strconv.Atoi(manifest.ImageSizeBytes)
 			totalSize += tmp
@@ -108,8 +108,8 @@ func PrintList(list ListResponse) {
 
 			timecreated, _ := strconv.ParseInt(manifest.TimeCreatedMs, 10, 64)
 			timeuploaded, _ := strconv.ParseInt(manifest.TimeUploadedMs, 10, 64)
-			ageReadable := time.Unix(timecreated/1000, 0).Format("2006-02-01")
-			uploadedReadable := time.Unix(timeuploaded/1000, 0).Format("2006-02-01")
+			ageReadable := time.Unix(timecreated/1000, 0).Format(time.RFC3339)
+			uploadedReadable := time.Unix(timeuploaded/1000, 0).Format(time.RFC3339)
 
 			t.AppendRow([]interface{}{i, repo.RepositoryPrefix, repo.ImageName, digestSlug, tagsSlug, utils.ByteCountSI(manifest.ImageSizeBytes), ageReadable, uploadedReadable})
 
