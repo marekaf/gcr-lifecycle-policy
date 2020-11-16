@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"strings"
 	"time"
 
 	log "github.com/sirupsen/logrus"
@@ -34,10 +35,21 @@ func filterCatalog(c Catalog, filter []string) Catalog {
 func existsInCluster(c Catalog, d Digest, name string) bool {
 
 	for _, repo := range c.Repositories {
+		// `name` contains path in registry
+
+		// split RepositoryPrefix to host and path
+		// `gcr.io/repo/` -> [`gcr.io`, `repo/`]
+		prefixes := strings.SplitN(repo.RepositoryPrefix, "/", 2)
+
+		// - concatinate repository path and image name
+		// - delete `@sha256` suffix from ImageName when specified the image in container_id in k8s manifest
+		imageNameInManifest := prefixes[1] + strings.Replace(repo.ImageName, "@sha256", "", 1)
+
 		// check the tags only for the same prefix / image names
-		if repo.ImageName != name {
+		if imageNameInManifest != name {
 			continue
 		}
+
 		for _, tag := range d.Tag {
 
 			// don't compare empty tags, skip them
@@ -46,6 +58,15 @@ func existsInCluster(c Catalog, d Digest, name string) bool {
 			}
 
 			if repo.Tag == tag {
+				return true
+			}
+		}
+
+		// if image specified in container_id in k8s manifest
+		// compare id instead of the tag name
+		if strings.Contains(repo.ImageName, "@sha256") {
+			containerId := "sha256:" + repo.Tag
+			if containerId == d.Name {
 				return true
 			}
 		}
