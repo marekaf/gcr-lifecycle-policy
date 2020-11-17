@@ -35,7 +35,7 @@ func TestExistsInCluster(t *testing.T) {
 			Tag:            []string{"master.6d902732dc8c0e19725eaa40c7a860a4c02ef406"},
 			TimeCreatedMs:  "1556399434238",
 			TimeUploadedMs: "1556399443871",
-		}, "webapp", false},
+		}, "mygcp-project/mycorp/webapp", false},
 		{Catalog{
 			Repositories: []Repository{
 				{
@@ -56,7 +56,7 @@ func TestExistsInCluster(t *testing.T) {
 			Tag:            []string{"master.abc", "latest"},
 			TimeCreatedMs:  "1556399434238",
 			TimeUploadedMs: "1556399443871",
-		}, "webapp", true},
+		}, "mygcp-project/mycorp/webapp", true},
 		{Catalog{
 			Repositories: []Repository{
 				{
@@ -77,7 +77,7 @@ func TestExistsInCluster(t *testing.T) {
 			Tag:            []string{"master.abc", "latest"},
 			TimeCreatedMs:  "1556399434238",
 			TimeUploadedMs: "1556399443871",
-		}, "webapp", false},
+		}, "mygcp-project/mycorp/webapp", false},
 		{Catalog{
 			Repositories: []Repository{
 				{
@@ -98,7 +98,7 @@ func TestExistsInCluster(t *testing.T) {
 			Tag:            []string{""},
 			TimeCreatedMs:  "1556399434238",
 			TimeUploadedMs: "1556399443871",
-		}, "mysvc", false},
+		}, "mygcp-project/mycorp/mysvc", false},
 	}
 
 	for _, table := range tables {
