@@ -65,8 +65,8 @@ func existsInCluster(c Catalog, d Digest, name string) bool {
 		// if image specified in container_id in k8s manifest
 		// compare id instead of the tag name
 		if strings.Contains(repo.ImageName, "@sha256") {
-			containerId := "sha256:" + repo.Tag
-			if containerId == d.Name {
+			containerID := "sha256:" + repo.Tag
+			if containerID == d.Name {
 				return true
 			}
 		}
