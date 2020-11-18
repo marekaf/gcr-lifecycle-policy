@@ -43,14 +43,15 @@ type ListResponse struct {
 
 // Config is our application config for filtering, listing, cleaning
 type Config struct {
-	CredsFile      string   // path of credentials json file
-	RepoFilter     []string // list of regions we want to check
-	KeepTags       int
-	RetentionDays  int
-	KubeconfigPath string
-	RegistryURL    string
-	SortBy         string
-	DryRun         bool
+	CredsFile       string   // path of credentials json file
+	RepoFilter      []string // list of regions we want to check
+	KeepTags        int
+	RetentionDays   int
+	KubeconfigPath  string
+	RegistryURL     string
+	SortBy          string
+	ProtectTagRegex string
+	DryRun          bool
 }
 
 // FilteredList holds list of tags that were already filtered out

@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"regexp"
 	"strings"
 	"time"
 
@@ -79,6 +80,19 @@ func digestHasTags(d Digest) bool {
 	return len(d.Tag) > 0
 }
 
+func protected(pattern string, d Digest) bool {
+	for _, tag := range d.Tag {
+		if tag == "" {
+			continue
+		}
+		matched, err := regexp.MatchString(pattern, tag)
+		if err == nil && matched {
+			return true
+		}
+	}
+	return false
+}
+
 func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 
 	filtered := FilteredList{}
@@ -102,6 +116,12 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 		keepCounter := 0
 
 		for _, digest := range sortedDigests {
+			if c.ProtectTagRegex != "" {
+				if protected(c.ProtectTagRegex, digest) {
+					log.Debugf("not deleting digest %+v because match protected pattern (%s)", digest, c.ProtectTagRegex)
+					continue
+				}
+			}
 
 			if keepCounter < keep {
 				keepCounter++
