@@ -138,32 +138,32 @@ func Test_protected(t *testing.T) {
 		z bool
 	}{
 		{"^release-",
-		Digest{
-			ImageSizeBytes: "29905102",
-			LayerID:        "",
-			MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
-			Tag:            []string{"release-20201118-123456"},
-			TimeCreatedMs:  "1556399434238",
-			TimeUploadedMs: "1556399443871",
-		}, true},
+			Digest{
+				ImageSizeBytes: "29905102",
+				LayerID:        "",
+				MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
+				Tag:            []string{"release-20201118-123456"},
+				TimeCreatedMs:  "1556399434238",
+				TimeUploadedMs: "1556399443871",
+			}, true},
 		{"^release-",
-		Digest{
-			ImageSizeBytes: "29905102",
-			LayerID:        "",
-			MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
-			Tag:            []string{"test-6ef75b0"},
-			TimeCreatedMs:  "1556399434238",
-			TimeUploadedMs: "1556399443871",
-		}, false},
+			Digest{
+				ImageSizeBytes: "29905102",
+				LayerID:        "",
+				MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
+				Tag:            []string{"test-6ef75b0"},
+				TimeCreatedMs:  "1556399434238",
+				TimeUploadedMs: "1556399443871",
+			}, false},
 		{"^v\\d+\\.\\d+\\.\\d+$",
-		Digest{
-			ImageSizeBytes: "29905102",
-			LayerID:        "",
-			MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
-			Tag:            []string{"v1.2.3"},
-			TimeCreatedMs:  "1556399434238",
-			TimeUploadedMs: "1556399443871",
-		}, true},
+			Digest{
+				ImageSizeBytes: "29905102",
+				LayerID:        "",
+				MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
+				Tag:            []string{"v1.2.3"},
+				TimeCreatedMs:  "1556399434238",
+				TimeUploadedMs: "1556399443871",
+			}, true},
 	}
 	for _, table := range tables {
 		res := protected(table.s, table.d)
@@ -173,4 +173,3 @@ func Test_protected(t *testing.T) {
 		}
 	}
 }
-
