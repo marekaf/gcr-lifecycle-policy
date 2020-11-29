@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"regexp"
 
 	"github.com/marekaf/gcr-lifecycle-policy/internal/worker"
 	log "github.com/sirupsen/logrus"
@@ -10,15 +11,16 @@ import (
 )
 
 var (
-	credsFile      string   // path of credentials json file
-	repoFilter     []string // list of regions we want to check
-	logLevel       string
-	keepTags       int
-	retentionDays  int
-	kubeconfigPath string
-	registryPrefix string
-	sortby         string
-	dryRun         bool
+	credsFile       string   // path of credentials json file
+	repoFilter      []string // list of regions we want to check
+	logLevel        string
+	keepTags        int
+	retentionDays   int
+	kubeconfigPath  string
+	registryPrefix  string
+	sortby          string
+	protectTagRegex string
+	dryRun          bool
 
 	// default values
 	repoFilterDefault     = []string{}
@@ -86,6 +88,7 @@ func init() {
 	// cleanup command
 	cleanupCmd.PersistentFlags().IntVar(&keepTags, "keep-tags", keepTagsDefault, "number of tags to keep per image")
 	cleanupCmd.PersistentFlags().IntVar(&retentionDays, "retention", retentionDaysDefault, "number of days of retention to keep images")
+	cleanupCmd.PersistentFlags().StringVar(&protectTagRegex, "protect-tag-regex", "", "regex to protect matched tag")
 	cleanupCmd.PersistentFlags().BoolVar(&dryRun, "dry-run", dryRunDefault, "dry-run for images cleaning")
 
 }
@@ -121,15 +124,23 @@ func cleanup(cmd *cobra.Command, args []string) {
 	// set loglevel
 	setLogLevel()
 
+	if protectTagRegex != "" {
+		_, err := regexp.Compile(protectTagRegex)
+		if err != nil {
+			log.Fatalf("Bad regex string: %s", protectTagRegex)
+		}
+	}
+
 	config := worker.Config{
-		CredsFile:      credsFile,
-		RepoFilter:     repoFilter,
-		KeepTags:       keepTags,
-		RetentionDays:  retentionDays,
-		RegistryURL:    registryPrefix,
-		SortBy:         sortby,
-		KubeconfigPath: kubeconfigPath,
-		DryRun:         dryRun,
+		CredsFile:       credsFile,
+		RepoFilter:      repoFilter,
+		KeepTags:        keepTags,
+		RetentionDays:   retentionDays,
+		RegistryURL:     registryPrefix,
+		SortBy:          sortby,
+		KubeconfigPath:  kubeconfigPath,
+		ProtectTagRegex: protectTagRegex,
+		DryRun:          dryRun,
 	}
 
 	worker.HandleCleanup(config)
