@@ -119,7 +119,7 @@ func main() {
 	rootCmd.Execute()
 }
 
-func cleanup(cmd *cobra.Command, args []string) {
+func cleanup(_ *cobra.Command, _ []string) {
 
 	// set loglevel
 	setLogLevel()
@@ -146,7 +146,7 @@ func cleanup(cmd *cobra.Command, args []string) {
 	worker.HandleCleanup(config)
 }
 
-func list(cmd *cobra.Command, args []string) {
+func list(_ *cobra.Command, _ []string) {
 
 	// set loglevel
 	setLogLevel()
@@ -162,7 +162,7 @@ func list(cmd *cobra.Command, args []string) {
 	worker.PrintList(result)
 }
 
-func listRepos(cmd *cobra.Command, args []string) {
+func listRepos(_ *cobra.Command, _ []string) {
 
 	// set loglevel
 	setLogLevel()
@@ -178,7 +178,7 @@ func listRepos(cmd *cobra.Command, args []string) {
 	worker.PrintListRepos(result)
 }
 
-func listCluster(cmd *cobra.Command, args []string) {
+func listCluster(_ *cobra.Command, _ []string) {
 
 	// set loglevel
 	setLogLevel()
