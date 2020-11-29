@@ -1,0 +1,33 @@
+fail_fast: false
+repos:
+  - repo: git://github.com/dnephin/pre-commit-golang
+    rev: master
+    hooks:
+      - id: go-fmt
+      - id: go-lint
+      - id: go-imports
+      - id: go-cyclo
+        args: [-over=15]
+      - id: go-critic
+      - id: go-mod-tidy
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args:
+          - --markdown-linebreak-ext=md
+      - id: pretty-format-json
+        args:
+          - --autofix
+          - --no-sort-keys
+      - id: check-added-large-files
+      - id: detect-private-key
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.25.0
+    hooks:
+      - id: yamllint
+        files: \.(yaml)$
