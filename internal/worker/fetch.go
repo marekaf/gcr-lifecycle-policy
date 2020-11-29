@@ -34,8 +34,6 @@ func fetchCatalog(c Config, auth *oauth2.Token) Catalog {
 		log.Fatal(jsonErr)
 	}
 
-	//log.Println(string(body))
-
 	catalog := Catalog{}
 	for _, item := range catalogResp.Repositories {
 		catalog.Repositories = append(catalog.Repositories, extractRepositoryFromImage(item))

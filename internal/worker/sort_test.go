@@ -128,7 +128,7 @@ func Test_toSortedSlice(t *testing.T) {
 				LayerID:        "",
 				MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
 				Tag:            []string{"stage"},
-				TimeCreatedMs:  "1556399434248", //newest by 11ms
+				TimeCreatedMs:  "1556399434248", // newest by 11ms
 				TimeUploadedMs: "1556399443871",
 				Name:           "sha256:2066edba3485c8f4980ad3d8d96c3ef21de5564d7148146c4978f0d474b67263",
 			},
@@ -137,7 +137,7 @@ func Test_toSortedSlice(t *testing.T) {
 				LayerID:        "",
 				MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
 				Tag:            []string{"master.6d902732dc8c0e19725eaa40c7a860a4c02ef406"},
-				TimeCreatedMs:  "1556399434238", //newer by 1ms
+				TimeCreatedMs:  "1556399434238", // newer by 1ms
 				TimeUploadedMs: "1556399443871",
 				Name:           "sha256:1366ef2a3485c8f4980ad3d8d96c3ef21de5564d7148146c4978f0d474b67263",
 			},
@@ -146,7 +146,7 @@ func Test_toSortedSlice(t *testing.T) {
 				LayerID:        "",
 				MediaType:      "application/vnd.docker.distribution.manifest.v2+json",
 				Tag:            []string{"dev", "latest"},
-				TimeCreatedMs:  "1556399434237", //oldest by 1ms
+				TimeCreatedMs:  "1556399434237", // oldest by 1ms
 				TimeUploadedMs: "1556399443871",
 				Name:           "sha256:5e6a2a225050edcb62cea2a01f4f1e4b2610b6c9e98e8b347f78c49fdc05aff7",
 			},
