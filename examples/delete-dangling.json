@@ -1,8 +1,8 @@
 {
-    "errors": [
-        {
-            "code": "GOOGLE_MANIFEST_DANGLING_TAG",
-            "message": "Manifest is still referenced by tag: master.125accav45va5va5"
-        }
-    ]
+  "errors": [
+    {
+      "code": "GOOGLE_MANIFEST_DANGLING_TAG",
+      "message": "Manifest is still referenced by tag: master.125accav45va5va5"
+    }
+  ]
 }

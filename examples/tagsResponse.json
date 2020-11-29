@@ -1,74 +1,74 @@
 {
-    "child": [],
-    "manifest": {
-        "sha256:1366ef2a3485c8f4980ad3d8d96c3ef21de5564d7148146c4978f0d474b67263": {
-            "imageSizeBytes": "29905102",
-            "layerId": "",
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "tag": [
-                "master.6d902732dc8c0e19725eaa40c7a860a4c02ef406"
-            ],
-            "timeCreatedMs": "1556399434238",
-            "timeUploadedMs": "1556399443871"
-        },
-        "sha256:3e35bb32f0f2013812e7c12e26e00cd48bb9cf26817b3861061d5fe4931a5b2d": {
-            "imageSizeBytes": "96040687",
-            "layerId": "",
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "tag": [
-                "master.5f8214b61cbff6af5a76e98bba8da98016bf5ac0"
-            ],
-            "timeCreatedMs": "1556547119968",
-            "timeUploadedMs": "1556547125450"
-        },
-        "sha256:5e6a2a225050edcb62cea2a01f4f1e4b2610b6c9e98e8b347f78c49fdc05aff7": {
-            "imageSizeBytes": "29909590",
-            "layerId": "",
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "tag": [
-                "master.75c13455fc6a160980b26a5a703395499ec0a0f9"
-            ],
-            "timeCreatedMs": "1556371564286",
-            "timeUploadedMs": "1556371573323"
-        },
-        "sha256:73ffd31b8d6de070e0e1a153a3cd47dcf508d2d9acf4c77ccdd7dc96eff651b4": {
-            "imageSizeBytes": "29908835",
-            "layerId": "",
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "tag": [
-                "master.31853a683b132fa7731f35599b8eeb67505215ff"
-            ],
-            "timeCreatedMs": "1556369644821",
-            "timeUploadedMs": "1556369654388"
-        },
-        "sha256:9724e1a8ee35b5280aa5799992f810d965b42b0bcb7fd89b5c5cdf3aa1cb4e1d": {
-            "imageSizeBytes": "29911186",
-            "layerId": "",
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "tag": [
-                "master.41176fcbe970eff974cfb13876d4c5abc35a644e"
-            ],
-            "timeCreatedMs": "1556374265601",
-            "timeUploadedMs": "1556374276880"
-        },
-        "sha256:ad9c30d87f8f0656decf99a01614412812965a7183b2ec5042932fe0f685ab7c": {
-            "imageSizeBytes": "29935452",
-            "layerId": "",
-            "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
-            "tag": [
-                "master.c37a530f6476185f9450d78ddec0b39b3a17337c"
-            ],
-            "timeCreatedMs": "1556400842760",
-            "timeUploadedMs": "1556400852168"
-        }
+  "child": [],
+  "manifest": {
+    "sha256:1366ef2a3485c8f4980ad3d8d96c3ef21de5564d7148146c4978f0d474b67263": {
+      "imageSizeBytes": "29905102",
+      "layerId": "",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "tag": [
+        "master.6d902732dc8c0e19725eaa40c7a860a4c02ef406"
+      ],
+      "timeCreatedMs": "1556399434238",
+      "timeUploadedMs": "1556399443871"
     },
-    "name": "my-repo/my-service",
-    "tags": [
-        "master.31853a683b132fa7731f35599b8eeb67505215ff",
-        "master.41176fcbe970eff974cfb13876d4c5abc35a644e",
-        "master.5f8214b61cbff6af5a76e98bba8da98016bf5ac0",
-        "master.6d902732dc8c0e19725eaa40c7a860a4c02ef406",
-        "master.75c13455fc6a160980b26a5a703395499ec0a0f9",
+    "sha256:3e35bb32f0f2013812e7c12e26e00cd48bb9cf26817b3861061d5fe4931a5b2d": {
+      "imageSizeBytes": "96040687",
+      "layerId": "",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "tag": [
+        "master.5f8214b61cbff6af5a76e98bba8da98016bf5ac0"
+      ],
+      "timeCreatedMs": "1556547119968",
+      "timeUploadedMs": "1556547125450"
+    },
+    "sha256:5e6a2a225050edcb62cea2a01f4f1e4b2610b6c9e98e8b347f78c49fdc05aff7": {
+      "imageSizeBytes": "29909590",
+      "layerId": "",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "tag": [
+        "master.75c13455fc6a160980b26a5a703395499ec0a0f9"
+      ],
+      "timeCreatedMs": "1556371564286",
+      "timeUploadedMs": "1556371573323"
+    },
+    "sha256:73ffd31b8d6de070e0e1a153a3cd47dcf508d2d9acf4c77ccdd7dc96eff651b4": {
+      "imageSizeBytes": "29908835",
+      "layerId": "",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "tag": [
+        "master.31853a683b132fa7731f35599b8eeb67505215ff"
+      ],
+      "timeCreatedMs": "1556369644821",
+      "timeUploadedMs": "1556369654388"
+    },
+    "sha256:9724e1a8ee35b5280aa5799992f810d965b42b0bcb7fd89b5c5cdf3aa1cb4e1d": {
+      "imageSizeBytes": "29911186",
+      "layerId": "",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "tag": [
+        "master.41176fcbe970eff974cfb13876d4c5abc35a644e"
+      ],
+      "timeCreatedMs": "1556374265601",
+      "timeUploadedMs": "1556374276880"
+    },
+    "sha256:ad9c30d87f8f0656decf99a01614412812965a7183b2ec5042932fe0f685ab7c": {
+      "imageSizeBytes": "29935452",
+      "layerId": "",
+      "mediaType": "application/vnd.docker.distribution.manifest.v2+json",
+      "tag": [
         "master.c37a530f6476185f9450d78ddec0b39b3a17337c"
-    ]
+      ],
+      "timeCreatedMs": "1556400842760",
+      "timeUploadedMs": "1556400852168"
+    }
+  },
+  "name": "my-repo/my-service",
+  "tags": [
+    "master.31853a683b132fa7731f35599b8eeb67505215ff",
+    "master.41176fcbe970eff974cfb13876d4c5abc35a644e",
+    "master.5f8214b61cbff6af5a76e98bba8da98016bf5ac0",
+    "master.6d902732dc8c0e19725eaa40c7a860a4c02ef406",
+    "master.75c13455fc6a160980b26a5a703395499ec0a0f9",
+    "master.c37a530f6476185f9450d78ddec0b39b3a17337c"
+  ]
 }
