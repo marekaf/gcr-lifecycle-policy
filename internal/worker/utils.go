@@ -44,7 +44,7 @@ func daysToTime(start time.Time, days int) time.Time {
 	return start.AddDate(0, 0, -days)
 }
 
-func reqWithAuth(req *http.Request, c http.Client, url string, token string) ([]byte, error) {
+func reqWithAuth(req *http.Request, c http.Client, token string) ([]byte, error) {
 
 	req.Header.Set("Authorization", "Bearer "+token)
 
@@ -74,7 +74,7 @@ func getWithAuth(c http.Client, url string, token string) ([]byte, error) {
 		return nil, err
 	}
 
-	body, err := reqWithAuth(req, c, url, token)
+	body, err := reqWithAuth(req, c, token)
 	if err != nil {
 		return nil, err
 	}
@@ -89,7 +89,7 @@ func deleteWithAuth(c http.Client, url string, token string) ([]byte, error) {
 		return nil, err
 	}
 
-	body, err := reqWithAuth(req, c, url, token)
+	body, err := reqWithAuth(req, c, token)
 	if err != nil {
 		return nil, err
 	}
