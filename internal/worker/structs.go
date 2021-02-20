@@ -5,9 +5,16 @@ type Catalog struct {
 	Repositories []Repository `json:"repositories"`
 }
 
+// CatalogResponseError holds info about a possible error
+type CatalogResponseError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
 // CatalogResponse is the json api response
 type CatalogResponse struct {
-	Repositories []string `json:"repositories"`
+	Repositories []string               `json:"repositories"`
+	Errors       []CatalogResponseError `json:"errors"`
 }
 
 // Repository is our struct to hold parsed prefix, name, tag of image
