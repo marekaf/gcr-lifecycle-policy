@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -45,7 +46,7 @@ func serviceAccount(credentialFile string) (*oauth2.Token, error) {
 		},
 		TokenURL: google.JWTTokenURL,
 	}
-	token, err := config.TokenSource(oauth2.NoContext).Token()
+	token, err := config.TokenSource(context.TODO()).Token()
 	if err != nil {
 		return nil, err
 	}
