@@ -22,6 +22,7 @@ func getToken(credsFile string) *oauth2.Token {
 }
 
 func serviceAccount(credentialFile string) (*oauth2.Token, error) {
+
 	b, err := ioutil.ReadFile(credentialFile)
 	if err != nil {
 		return nil, err
@@ -30,7 +31,11 @@ func serviceAccount(credentialFile string) (*oauth2.Token, error) {
 		Email      string `json:"client_email"`
 		PrivateKey string `json:"private_key"`
 	}{}
-	json.Unmarshal(b, &c)
+
+	err = json.Unmarshal(b, &c)
+	if err != nil {
+		return nil, err
+	}
 	config := &jwt.Config{
 		Email:      c.Email,
 		PrivateKey: []byte(c.PrivateKey),
