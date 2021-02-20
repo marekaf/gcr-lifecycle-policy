@@ -102,7 +102,7 @@ func filter(c Config, list ListResponse, clusterCat Catalog) FilteredList {
 
 	for _, image := range list.TagsResponses {
 
-		filteredManifests := make(map[string]Digest, 0)
+		filteredManifests := make(map[string]Digest)
 
 		filteredImage := TagsResponse{
 			Name:     image.Name,
