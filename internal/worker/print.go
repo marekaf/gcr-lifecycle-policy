@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -10,26 +9,6 @@ import (
 	"github.com/jedib0t/go-pretty/table"
 	"github.com/marekaf/gcr-lifecycle-policy/internal/utils"
 )
-
-func duration(d time.Duration) string {
-	if d < day {
-		return d.String()
-	}
-
-	var b strings.Builder
-
-	if d >= year {
-		years := d / year
-		fmt.Fprintf(&b, "%dy ", years)
-		d -= years * year
-	}
-
-	days := d / day
-	d -= days * day
-	fmt.Fprintf(&b, "%dd", days)
-
-	return b.String()
-}
 
 func printBeforeCleanup(list FilteredList) {
 
