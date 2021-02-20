@@ -3,7 +3,6 @@ module github.com/marekaf/gcr-lifecycle-policy
 go 1.14
 
 require (
-	github.com/fzipp/gocyclo v0.3.1 // indirect
 	github.com/go-openapi/strfmt v0.19.3 // indirect
 	github.com/google/go-cmp v0.4.0
 	github.com/imdario/mergo v0.3.10 // indirect
