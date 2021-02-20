@@ -116,7 +116,10 @@ func setLogLevel() {
 }
 
 func main() {
-	rootCmd.Execute()
+	err := rootCmd.Execute()
+	if err != nil {
+		log.Fatalf("root cmd execute failed")
+	}
 }
 
 func cleanup(_ *cobra.Command, _ []string) {
