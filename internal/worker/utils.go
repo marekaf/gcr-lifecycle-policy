@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-const (
-	day  = time.Minute * 60 * 24
-	year = 365 * day
-)
-
 func extractRepositoryFromImage(input string) Repository {
 
 	image := ""
