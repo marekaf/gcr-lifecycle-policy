@@ -9,7 +9,7 @@ It scans all the Docker registry images (it supports paths like `eu.gcr.io/my-pr
 
 Using `--cluster path/to/kubeconfig` it queries all pods and replicasets in the GKE cluster and prevents these image tags before deleting.
 
-```
+```shell
 $ gcr cleanup --help
 Usage:
   gcr cleanup [flags]
@@ -34,14 +34,14 @@ Global Flags:
 `WARNING`: This is an alpha version! Be very careful using this in production.
 
 ## How to build it
-```
+```shell
 make dep
 make build
 ```
 
 ## How to run it
 
-### provision GCP IAM service account
+### Provision GCP IAM service account
 `serviceaccount.json` is a json key of IAM service account called `gcr-retention-policy` that has these roles
 
 ```
@@ -52,11 +52,15 @@ Storage Object Admin
 Artifact Registry Repository Administrator
 ```
 
-### run it
+### Run it
 
-```
+```shell
 make build && ./bin/gcr --help
 ```
+
+### `gcr cleanup` without kubeconfig
+
+If you want to nuke old images without checking if they're currently used in a cluster you can do so by setting `--cluster=""`. When using this "dummy mode" your IAM service account doesn't need any `Kubernetes Engine` roles listed above.
 
 ## TODO:
 - release binary to Github Release
