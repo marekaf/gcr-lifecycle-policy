@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -31,13 +32,19 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 				if c.DryRun {
 					log.Debugf("not calling HTTP DELETE %s because dryRun is enabled", url)
 				} else {
-					body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
+					err := retry(func() error {
+						body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
+						if err != nil {
+							log.Fatal(err)
+						}
+
+						log.Debugf(string(body))
+						// TODO: we should probably read the response body
+						return nil
+					})
 					if err != nil {
 						log.Fatal(err)
 					}
-
-					log.Debugf(string(body))
-					// TODO: we should probably read the response body
 				}
 			}
 
@@ -50,13 +57,19 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 			if c.DryRun {
 				log.Debugf("not calling HTTP DELETE %s because dryRun is enabled", url)
 			} else {
-				body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
+				err := retry(func() error {
+					body, err := deleteWithAuth(spaceClient, url, auth.AccessToken)
+					if err != nil {
+						log.Fatal(err)
+					}
+
+					log.Debugf(string(body))
+					// TODO: we should probably read the response body
+					return nil
+				})
 				if err != nil {
 					log.Fatal(err)
 				}
-
-				log.Debugf(string(body))
-				// TODO: we should probably read the response body
 			}
 		}
 
@@ -67,6 +80,20 @@ func cleanup(list FilteredList, c Config, auth *oauth2.Token) {
 	} else {
 		log.Infof("Total number of images deleted: '%d'", deleted)
 	}
+}
+
+// retry executes the provided function with retry logic
+func retry(deleteImage func() error) error {
+	maxRetries := 5
+	for i := 0; i < maxRetries; i++ {
+		err := deleteImage()
+		if err == nil {
+			return nil
+		}
+		log.Warnf("Retry failed. Retrying in 5 seconds... (attempt %d/%d)", i+1, maxRetries)
+		time.Sleep(5 * time.Second)
+	}
+	return fmt.Errorf("maximum number of retries reached")
 }
 
 // HandleCleanup function
